@@ -51,10 +51,10 @@ export default function BidPage() {
       wsRef.current.onmessage = (event) => {
         const data = JSON.parse(event.data)
         if (data.harga_baru && data.barang_id === foundProduct.kode) {
-          setProduct((prevProduct) => ({
+          setProduct((prevProduct: typeof product | null) => ({
             ...prevProduct,
             harga_saatini: data.harga_baru,
-          }))
+          }))          
           fetchBidHistory() 
         }
       }

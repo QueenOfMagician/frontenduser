@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import FooterPage from '@/components/pagecomponent/footer-page';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaFacebook, FaGoogle } from "react-icons/fa";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 
 export default function SigninForm() {
