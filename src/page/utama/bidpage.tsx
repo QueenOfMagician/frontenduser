@@ -46,7 +46,7 @@ export default function BidPage() {
       fetchBidHistory()
 
       
-      wsRef.current = new WebSocket(`ws://34.128.95.7:8000/ws/auction/${kode}/`)
+      wsRef.current = new WebSocket(`ws://127.0.0.1:8000/ws/auction/${kode}/`)
 
       wsRef.current.onmessage = (event) => {
         const data = JSON.parse(event.data)
@@ -113,7 +113,7 @@ export default function BidPage() {
         throw new Error("Bid amount is invalid.")
       }
 
-      const response = await fetch("http://34.128.95.7:8000/lelang/bid/", {
+      const response = await fetch("http://127.0.0.1:8000/lelang/bid/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -142,7 +142,7 @@ export default function BidPage() {
   }
 
   const fetchBidHistory = () => {
-    fetch(`http://34.128.95.7:8000/lelang/riwayat/?barang_kode=${kode}`, {
+    fetch(`http://127.0.0.1:8000/lelang/riwayat/?barang_kode=${kode}`, {
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
       },
@@ -179,7 +179,7 @@ export default function BidPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <img
-                  src={product.gambar ? `http://34.128.95.7:8000${product.gambar}` : "/placeholder.svg"}
+                  src={product.gambar ? `http://127.0.0.1:8000${product.gambar}` : "/placeholder.svg"}
                   alt={product.nama || "Product Image"}
                   className="w-full h-64 object-cover rounded-lg"
                 />

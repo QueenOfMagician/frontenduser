@@ -16,7 +16,7 @@ export default function SigninForm() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const response = await fetch('http://34.128.95.7:8000/akun/signin/', {
+      const response = await fetch('http://127.0.0.1:8000/akun/signin/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -44,7 +44,8 @@ export default function SigninForm() {
     
         navigate('/');
       } else {
-        alert(`Signin failed: ${data.message}`);
+        const errorMessage = data.status || "Unknown error";
+        alert(`Signin failed: ${errorMessage}`);
       }
     } catch (error) {
       console.error('Error:', error);

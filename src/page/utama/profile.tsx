@@ -1,196 +1,147 @@
-"use client"
-
 import type React from "react"
+import type { FC } from "react"
 import { useState } from "react"
-import { Camera, Edit, LogOut, Shield, Gavel, Trophy } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { CheckCircle, DollarSign, ShoppingBag, Award, Edit } from "lucide-react"
+import Header from "@/components/pagecomponent/header-page"
+import FooterPage from "@/components/pagecomponent/footer-page"
 
-interface Profile {
-  id: string
-  username: string
-  avatar_url: string
+interface ProfileData {
+  name: string
+  email: string
   balance: number
-  is_verified: boolean
-  total_auctions: number
-  won_auctions: number
+  auctionsParticipated: number
+  auctionsWon: number
 }
 
-const dummyUser = {
-  email: "user@example.com",
-}
+const ProfilePage: FC = () => {
+  const [profileData] = useState<ProfileData>({
+    name: "John Doe",
+    email: "johndoe@example.com",
+    balance: 10000,
+    auctionsParticipated: 50,
+    auctionsWon: 15,
+  })
 
-const dummyProfile: Profile = {
-  id: "12345",
-  username: "JohnDoe",
-  avatar_url: "/placeholder.svg",
-  balance: 5000,
-  is_verified: true,
-  total_auctions: 12,
-  won_auctions: 5,
-}
+  const [profileImage, setProfileImage] = useState<string>("/placeholder.svg")
 
-const Profile: React.FC = () => {
-  const [profile, setProfile] = useState<Profile>(dummyProfile)
-  const [editing, setEditing] = useState(false)
-  const [newUsername, setNewUsername] = useState("")
-  const [newBalance, setNewBalance] = useState(0)
-  const [newPassword, setNewPassword] = useState("")
-
-  const handleLogout = () => {
-    alert("Logout successful")
-    window.location.href = "/login"
-  }
-
-  const handleProfileUpdate = () => {
-    const updatedProfile = {
-      ...profile,
-      username: newUsername || profile.username,
-      balance: profile.balance + newBalance,
-    }
-
-    setProfile(updatedProfile)
-    setEditing(false)
-    setNewUsername("")
-    setNewBalance(0)
-    alert("Profile updated successfully!")
-  }
-
-  const handleAvatarUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
-    if (!file) return
-
-    const fileUrl = URL.createObjectURL(file)
-    setProfile({ ...profile, avatar_url: fileUrl })
-    alert("Profile picture updated!")
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setProfileImage(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+    }
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Profile</h1>
-      <div className="bg-white shadow-md rounded-lg p-6">
-        <div className="flex items-center mb-4">
-          <img src={profile.avatar_url} alt="Profile" className="w-20 h-20 rounded-full mr-4" />
-          <div>
-            <h2 className="text-xl font-semibold">{profile.username}</h2>
-            <p className="text-gray-600">{dummyUser.email}</p>
-            {profile.is_verified && (
-              <span className="inline-flex items-center bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                <Shield className="w-3 h-3 mr-1" />
+    <>
+      <Header />
+      <div className="min-h-screen bg-gradient-to-b from-purple-100 to-pink-100 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-8">
+            <div className="relative w-32 h-32 mx-auto mb-4 group">
+              <img
+                src={profileImage || "/placeholder.svg"}
+                alt="Profile Picture"
+                className="w-32 h-32 rounded-full border-4 border-white shadow-lg object-cover"
+              />
+              <div className="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <label htmlFor="profile-image-upload" className="cursor-pointer">
+                  <Edit className="w-8 h-8 text-white" />
+                </label>
+                <input
+                  id="profile-image-upload"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleImageChange}
+                />
+              </div>
+            </div>
+            <h1 className="text-3xl font-bold text-gray-900 flex items-center justify-center">
+              {profileData.name}
+              <Badge variant="secondary" className="ml-2">
+                <CheckCircle className="w-4 h-4 mr-1" />
                 Verified
-              </span>
-            )}
+              </Badge>
+            </h1>
+            <p className="text-gray-600 mt-1">{profileData.email}</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <Card>
+              <CardContent className="flex items-center p-6">
+                <DollarSign className="w-8 h-8 text-purple-600 mr-4" />
+                <div>
+                  <p className="text-sm text-gray-500">Balance</p>
+                  <p className="text-2xl font-bold">${profileData.balance.toLocaleString()}</p>
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="flex items-center p-6">
+                <ShoppingBag className="w-8 h-8 text-purple-600 mr-4" />
+                <div>
+                  <p className="text-sm text-gray-500">Auctions Participated</p>
+                  <p className="text-2xl font-bold">{profileData.auctionsParticipated}</p>
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="flex items-center p-6">
+                <Award className="w-8 h-8 text-purple-600 mr-4" />
+                <div>
+                  <p className="text-sm text-gray-500">Auctions Won</p>
+                  <p className="text-2xl font-bold">{profileData.auctionsWon}</p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <Tabs defaultValue="email" className="mb-8">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="email">Edit Email</TabsTrigger>
+              <TabsTrigger value="password">Edit Password</TabsTrigger>
+            </TabsList>
+            <TabsContent value="email">
+              <Card>
+                <CardContent className="pt-6">
+                  <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+                    <Input type="email" placeholder="New Email" />
+                    <Button type="submit">Update Email</Button>
+                  </form>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="password">
+              <Card>
+                <CardContent className="pt-6">
+                  <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+                    <Input type="password" placeholder="New Password" />
+                    <Input type="password" placeholder="Confirm New Password" />
+                    <Button type="submit">Update Password</Button>
+                  </form>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+
+          <div className="text-center">
+            <Button variant="destructive">Delete Account</Button>
           </div>
         </div>
-
-        <div className="mb-4">
-          <h3 className="text-lg font-semibold mb-2">Auction Statistics</h3>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-gray-100 p-3 rounded">
-              <div className="flex items-center">
-                <Gavel className="w-5 h-5 mr-2 text-gray-600" />
-                <span className="font-medium">Total Auctions</span>
-              </div>
-              <p className="text-2xl font-bold">{profile.total_auctions}</p>
-            </div>
-            <div className="bg-gray-100 p-3 rounded">
-              <div className="flex items-center">
-                <Trophy className="w-5 h-5 mr-2 text-gray-600" />
-                <span className="font-medium">Won Auctions</span>
-              </div>
-              <p className="text-2xl font-bold">{profile.won_auctions}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="mb-4">
-          <h3 className="text-lg font-semibold mb-2">Account Balance</h3>
-          <p className="text-2xl font-bold">${profile.balance.toFixed(2)}</p>
-        </div>
-
-        {editing ? (
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="newUsername" className="block text-sm font-medium text-gray-700">
-                New Username
-              </label>
-              <input
-                type="text"
-                id="newUsername"
-                value={newUsername}
-                onChange={(e) => setNewUsername(e.target.value)}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-              />
-            </div>
-            <div>
-              <label htmlFor="newBalance" className="block text-sm font-medium text-gray-700">
-                Add Balance
-              </label>
-              <input
-                type="number"
-                id="newBalance"
-                value={newBalance}
-                onChange={(e) => setNewBalance(Number(e.target.value))}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-              />
-            </div>
-            <button
-              onClick={handleProfileUpdate}
-              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-            >
-              Save Changes
-            </button>
-            <button
-              onClick={() => setEditing(false)}
-              className="ml-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
-            >
-              Cancel
-            </button>
-          </div>
-        ) : (
-          <button
-            onClick={() => setEditing(true)}
-            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded flex items-center"
-          >
-            <Edit className="w-4 h-4 mr-2" />
-            Edit Profile
-          </button>
-        )}
-
-        <div className="mt-4">
-          <h3 className="text-lg font-semibold mb-2">Change Password</h3>
-          <input
-            type="password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            placeholder="New Password"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-          />
-          <button
-            onClick={() => alert("Password updated!")}
-            className="mt-2 bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded"
-          >
-            Change Password
-          </button>
-        </div>
-
-        <div className="mt-4">
-          <h3 className="text-lg font-semibold mb-2">Update Profile Picture</h3>
-          <label className="flex items-center space-x-2 cursor-pointer">
-            <Camera className="w-6 h-6 text-gray-600" />
-            <span className="text-gray-600">Choose a new photo</span>
-            <input type="file" accept="image/*" onChange={handleAvatarUpload} className="hidden" />
-          </label>
-        </div>
-
-        <button
-          onClick={handleLogout}
-          className="mt-6 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded flex items-center"
-        >
-          <LogOut className="w-4 h-4 mr-2" />
-          Logout
-        </button>
       </div>
-    </div>
+      <FooterPage />
+    </>
   )
 }
 
-export default Profile
+export default ProfilePage
+

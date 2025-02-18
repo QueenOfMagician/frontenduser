@@ -1,7 +1,8 @@
 "use client"
-
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useFormContext } from "react-hook-form";
+import { useNavigate } from 'react-router-dom';
 import { CalendarIcon, ImageIcon, Loader2 } from "lucide-react"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
@@ -39,6 +40,8 @@ type FormValues = z.infer<typeof formSchema>
 export default function AddItemForm() {
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const navigate = useNavigate();
+  const usernameFromStorage = sessionStorage.getItem("userId") || "";
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -66,7 +69,7 @@ export default function AddItemForm() {
       })
 
       // Replace with your API endpoint
-      const response = await fetch("http://34.128.95.7:8000/lelang/tambahbarang/", {
+      const response = await fetch("http://127.0.0.1:8000/lelang/tambahbarang/", {
         method: "POST",
         body: formData,
       })
@@ -79,6 +82,7 @@ export default function AddItemForm() {
       form.reset()
       setImagePreview(null)
       alert("Barang berhasil ditambahkan!")
+      navigate('/');
     } catch (error) {
       console.error("Error:", error)
       alert("Terjadi kesalahan saat menambahkan barang")
@@ -247,19 +251,28 @@ export default function AddItemForm() {
                   )}
                 />
 
-                <FormField
-                  control={form.control}
-                  name="penjual"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Nama Penjual</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Masukkan nama penjual" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                  <FormField
+                    control={form.control}
+                    name="penjual"
+                    render={({ field }) => {
+                      const { setValue } = useFormContext();
+
+                      useEffect(() => {
+                        setValue("penjual", usernameFromStorage);
+                      }, [setValue]);
+
+                      return (
+                        <FormItem>
+                          <FormLabel></FormLabel>
+                          <FormControl>
+                            <Input placeholder="Masukkan nama penjual" {...field} type="hidden"   />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      );
+                    }}
+                  />
+
 
                 <FormField
                   control={form.control}

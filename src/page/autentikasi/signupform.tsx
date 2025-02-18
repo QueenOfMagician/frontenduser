@@ -32,7 +32,7 @@ export default function SignupForm() {
     }
 
     try {
-      const response = await fetch('http://34.128.95.7:8000/akun/signup/', {
+      const response = await fetch('http://127.0.0.1:8000/akun/signup/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

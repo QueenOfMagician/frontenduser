@@ -24,7 +24,7 @@ export default function ListBarang() {
     const fetchSearchResults = async () => {
       if (searchQuery) {
         try {
-          const response = await fetch(`http://34.128.95.7:8000/lelang/search/?q=${encodeURIComponent(searchQuery)}`)
+          const response = await fetch(`http://127.0.0.1:8000/lelang/search/?q=${encodeURIComponent(searchQuery)}`)
           if (!response.ok) throw new Error("Search failed")
           const data = await response.json()
           setFilteredProducts(data)
@@ -45,10 +45,13 @@ export default function ListBarang() {
   }
 
   if (error) {
+    location.reload();
     return <div className="flex items-center justify-center min-h-screen text-red-500">{error}</div>
   }
 
   const productsToDisplay = searchQuery ? filteredProducts : displayedProducts
+  console.log(sessionStorage.getItem('accessToken'))
+  console.log(sessionStorage.getItem('refreshToken'));
 
   return (
     <>
@@ -79,7 +82,7 @@ export default function ListBarang() {
                   <CardContent className="p-2">
                     <div className="overflow-hidden rounded-lg mb-2">
                       <img
-                        src={`http://34.128.95.7:8000/${product.gambar}`}
+                        src={`http://127.0.0.1:8000${product.gambar}`}
                         alt={product.nama}
                         className="w-full h-60 object-cover rounded-lg"
                       />

@@ -50,7 +50,7 @@ export default function ListBarang() {
 
   useEffect(() => {
     setIsLoading(true)
-    fetch('http://34.128.95.7:8000/lelang/list-barang/', {
+    fetch('http://127.0.0.1:8000/lelang/list-barang/', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`
@@ -258,7 +258,7 @@ export default function ListBarang() {
               {displayedProducts.map((product) => (
                 <Card key={product.id} className="overflow-hidden transition-shadow duration-300 hover:shadow-xl">
                   <CardContent className="p-0">
-                    <img src={`http://34.128.95.7:8000${product.gambar}`} alt={product.nama} className="w-full h-48 object-cover" />
+                    <img src={`http://127.0.0.1:8000${product.gambar}`} alt={product.nama} className="w-full h-48 object-cover" />
                     <div className="p-4">
                       <h2 className="text-xl font-semibold text-purple-700 dark:text-purple-300 mb-2">{product.nama}</h2>
                       <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">Seller: {product.penjual}</p>
