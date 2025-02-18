@@ -52,7 +52,7 @@ function OrderList({ status }: { status: OrderStatus }) {
       try {
         const accessToken = sessionStorage.getItem('accessToken'); // Ambil token dari sessionStorage
   
-        const response = await fetch("http://127.0.0.1:8000/lelang/pesanansaya/", {
+        const response = await fetch("http://34.128.95.7:8000/lelang/pesanansaya/", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

@@ -22,7 +22,7 @@ export default function BarangSaya() {
   useEffect(() => {
     const accessToken = sessionStorage.getItem('accessToken');
   
-    fetch("http://127.0.0.1:8000/lelang/barangsaya/", {
+    fetch("http://34.128.95.7:8000/lelang/barangsaya/", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

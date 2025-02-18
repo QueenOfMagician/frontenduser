@@ -55,7 +55,7 @@ export const AuctionProvider: React.FC<{ children: React.ReactNode }> = ({ child
   // Initial Data Fetch
   useEffect(() => {
     setIsLoading(true)
-    fetch("http://127.0.0.1:8000/lelang/list-barang/", {
+    fetch("http://34.128.95.7:8000/lelang/list-barang/", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
@@ -130,7 +130,7 @@ export const AuctionProvider: React.FC<{ children: React.ReactNode }> = ({ child
   // WebSocket for Price Updates
   useEffect(() => {
     const priceUpdateConnections = allProducts.map((product) => {
-      const ws = new WebSocket(`ws://127.0.0.1:8000/ws/auction/${product.kode}/`)
+      const ws = new WebSocket(`ws://34.128.95.7:8000/ws/auction/${product.kode}/`)
 
       ws.onopen = () => {
         console.log(`Price WebSocket connected for product: ${product.kode}`)
@@ -159,7 +159,7 @@ export const AuctionProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   // WebSocket for New Items
   useEffect(() => {
-    const ws = new WebSocket("ws://127.0.0.1:8000/ws/update/")
+    const ws = new WebSocket("ws://34.128.95.7:8000/ws/update/")
 
     ws.onopen = () => {
       console.log("New items WebSocket connected")

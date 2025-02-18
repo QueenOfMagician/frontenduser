@@ -69,7 +69,7 @@ export default function AddItemForm() {
       })
 
       // Replace with your API endpoint
-      const response = await fetch("http://127.0.0.1:8000/lelang/tambahbarang/", {
+      const response = await fetch("http://34.128.95.7:8000/lelang/tambahbarang/", {
         method: "POST",
         body: formData,
       })
